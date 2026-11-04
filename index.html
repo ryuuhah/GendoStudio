@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENDO STUDIO | High-Tech Drone & Technical Design</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #E53E3E; 
+            --accent-glow: rgba(229, 62, 62, 0.4);
+        }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #050505;
+            overflow-x: hidden;
+            margin: 0;
+            color: white;
+        }
+
+        /* Background Layers */
+        .bg-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .aurora-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
+            filter: blur(60px);
+            animation: auroraMove 12s infinite alternate ease-in-out;
+        }
+
+        #home {
+            background: linear-gradient(to bottom, rgba(5,5,5,0.8), rgba(5,5,5,0.8)), url('home_bg.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .caustic-overlay {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.03) 0%, transparent 30%);
+            mix-blend-mode: overlay;
+            animation: causticScale 8s infinite alternate ease-in-out, causticMove 15s infinite linear;
+        }
+
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* LIQUID GLASS & KULIT JERUK DIPERBAIKI (Berlaku Global) */
+        .liquid-texture {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(10px);
+            /* baseFrequency diubah ke 0.4 untuk memperbesar pori-pori/noise agar mirip kulit jeruk */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.25'/%3E%3C/svg%3E");
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.35s ease;
+        }
+
+        /* ANIMASI TITIK DIAGONAL DIPERPADAT */
+        .diagonal-dots {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+            /* Jarak diperkecil ke 20px */
+            background-size: 20px 20px;
+            animation: moveDots 5s linear infinite;
+        }
+        @keyframes moveDots {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 20px 20px; }
+        }
+
+        @keyframes auroraMove {
+            from { transform: translateY(-10%) translateX(-5%) rotate(0deg); }
+            to { transform: translateY(10%) translateX(5%) rotate(3deg); }
+        }
+
+        @keyframes causticScale {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.5); opacity: 0.6; }
+        }
+
+        @keyframes causticMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .hero-gendo { letter-spacing: 0.15em; margin-right: -0.15em; }
+        .hero-studio {
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--accent);
+            font-weight: 900;
+            letter-spacing: 0.25em;
+            margin-right: -0.25em;
+            paint-order: stroke fill;
+        }
+
+        .btn-order {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-order:hover {
+            transform: scale(1.05);
+            background-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            letter-spacing: 0.2em;
+        }
+
+        .contact-pulse-red {
+            background-color: var(--accent);
+            border: 1px solid var(--accent);
+            animation: contactPulseRed 2s infinite;
+            transition: all 0.3s ease;
+        }
+        .contact-pulse-red:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--accent-glow);
+        }
+        @keyframes contactPulseRed {
+            0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+        }
+
+        .price-container {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .price-hidden {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        .floating-contact {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #050505;
+            border: 1px solid var(--accent);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--accent-glow);
+            z-index: 999;
+            transition: all 0.4s ease;
+            animation: bouncePulse 3s infinite;
+        }
+        @keyframes bouncePulse {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); box-shadow: 0 0 30px var(--accent-glow); }
+        }
+        .floating-contact:hover {
+            background: var(--accent);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 62, 62, 0.15);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+        }
+
+        #loader {
+            position: fixed; inset: 0; background: #050505;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; transition: opacity 0.8s ease;
+        }
+
+        #mobile-menu {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(-110%);
+            opacity: 0;
+        }
+        #mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+        }
+
+        /* Lightbox & Zoom Styles */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #lightbox-img {
+            max-width: 90%;
+            max-height: 80%;
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+        #lightbox-img.zoomed {
+            transform: scale(1.5);
+            cursor: zoom-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="text-xl font-black tracking-[0.2em] uppercase text-white">
+            GENDO <span class="text-accent">STUDIO</span>
+        </div>
+    </div>
+
+    <div class="bg-wrapper">
+        <div class="aurora-bg"></div>
+        <div class="caustic-overlay"></div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <nav id="navbar" class="fixed w-full z-[70] py-6 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="logo.webp" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain">
+                <h1 class="text-xl md:text-2xl uppercase tracking-tighter">
+                    <span class="font-black text-white">GENDO</span> <span class="text-[#E53E3E] font-normal">STUDIO</span>
+                </h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-[0.3em] uppercase">
+                <a href="#home" class="nav-link hover:text-accent transition">Home</a>
+                <a href="#services" class="nav-link hover:text-accent transition">Services</a>
+                <a href="#portfolio" class="nav-link hover:text-accent transition">Portfolio</a>
+                <a href="https://wa.me/6285117788355" class="contact-pulse-red px-5 py-2 inline-block text-white font-bold tracking-widest">Contact</a>
+            </div>
+            <button id="menu-toggle" class="md:hidden outline-none relative z-[80]">
+                <i data-lucide="menu" id="menu-icon" class="text-white"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-[60] flex flex-col items-center justify-center space-y-8 text-sm font-bold tracking-[0.4em] uppercase md:hidden">
+        <a href="#home" class="mobile-link">Home</a>
+        <a href="#services" class="mobile-link">Services</a>
+        <a href="#portfolio" class="mobile-link">Portfolio</a>
+        <a href="https://wa.me/6285117788355" class="text-accent mobile-link">Contact</a>
+    </div>
+
+    <section id="home" class="min-h-screen flex items-center justify-center relative px-4 text-center overflow-hidden">
+        <div class="relative z-10 w-full" data-aos="zoom-in">
+            <h2 class="hero-gendo text-5xl md:text-[8rem] font-black leading-none uppercase">GENDO</h2>
+            <h2 class="hero-studio text-5xl md:text-[8rem] font-black leading-none uppercase mb-6">STUDIO</h2>
+            
+            <!-- Animasi AOS Gulir (muncul & keluar dinamis) -->
+            <div class="h-6 md:h-8 mb-10 mt-4 px-4 flex justify-center overflow-hidden">
+                <span data-aos="fade-up" data-aos-duration="1000" class="inline-block text-accent tracking-[0.2em] md:tracking-[0.4em] uppercase text-[9px] md:text-xs font-bold">
+                    Eksplorasi Presisi: Dari Visual Udara Hingga Arsitektur Nyata
+                </span>
+            </div>
+            
+            <!-- Tombol Berlatar Belakang Liquid Glass + Kulit Jeruk -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#services" class="liquid-texture rounded-full w-full sm:w-auto border border-white/10 px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">Explore <span class="text-accent group-hover:text-white">Services</span></a>
+                <a href="#portfolio" class="liquid-texture rounded-full w-full sm:w-auto border border-white/10 px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">View <span class="text-accent group-hover:text-white">Work</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transisi Gradien dengan Animasi AOS (Home -> Services) -->
+    <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
+
+    <!-- Services -->
+    <section id="services" class="py-24 px-6 relative overflow-hidden">
+        <div class="diagonal-dots"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8">
+                <div data-aos="fade-right">
+                    <h3 class="text-3xl md:text-4xl font-black uppercase text-center md:text-left text-white">Our<br><span class="text-[#E53E3E]">Services</span></h3>
+                </div>
+                
+                <!-- Tombol Toggle (Satuan/Paket) dengan Efek Liquid Glass & Skala -->
+                <div class="flex items-center bg-white/5 p-1 rounded-full border border-white/10 relative overflow-hidden" data-aos="fade-left">
+                    <button id="toggle-unit" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 liquid-texture text-white scale-105">Satuan</button>
+                    <button id="toggle-pack" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 text-gray-400">Paket</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-8 group" data-aos="fade-up">
+                    <i data-lucide="video" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
+                    <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Videografi Drone</h4>
+                    <p class="text-gray-400 text-sm mb-8 leading-relaxed">Dokumentasi udara sinematik <span class="text-accent/80">beresolusi tinggi</span> untuk kebutuhan profesional.</p>
+                    <div class="price-container text-2xl font-black price-value mb-6">Rp250.000 <span class="text-xs text-gray-500 font-normal">/ baterai</span></div>
+                    <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
+                </div>
+                <div class="glass-card p-8 group" data-aos="fade-up" data-aos-delay="100">
+                    <i data-lucide="map" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
+                    <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Foto Orthomosaic</h4>
+                    <p class="text-gray-400 text-sm mb-8 leading-relaxed">Pemetaan topografi <span class="text-accent/80">presisi tinggi</span> untuk survei lahan dan analisis spasial.</p>
+                    <div class="price-container text-2xl font-black price-value mb-6">Rp600.000 <span class="text-xs text-gray-500 font-normal">/ baterai</span></div>
+                    <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
+                </div>
+                <div class="glass-card p-8 group" data-aos="fade-up" data-aos-delay="200">
+                    <i data-lucide="pencil-ruler" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
+                    <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Gambar 2D+3D</h4>
+                    <p class="text-gray-400 text-sm mb-8 leading-relaxed">Visualisasi desain arsitektur realistis melalui <span class="text-accent/80">pemodelan 3D</span> berakurasi tinggi.</p>
+                    <div class="price-container text-2xl font-black price-value mb-6">Rp20.000 <span class="text-xs text-gray-500 font-normal">/ m²</span></div>
+                    <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transisi Gradien dengan Animasi AOS (Services -> Portfolio) -->
+    <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
+
+    <!-- Portfolio Gallery -->
+    <section id="portfolio" class="py-24 px-6 bg-white/5 gallery-texture relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-center text-2xl md:text-3xl font-black uppercase tracking-widest mb-16" data-aos="zoom-in-up"><span class="text-accent">Project</span> Gallery</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div onclick="openCategoryLightbox('drone')" class="aspect-square bg-neutral-900 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left">
+                    <img src="sub/drone_view1.webp" alt="Drone View" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">Drone View (4)</span>
+                    </div>
+                </div>
+                <div onclick="openCategoryLightbox('sitemap')" class="aspect-square bg-neutral-800 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left" data-aos-delay="100">
+                    <img src="sub/site_map1.webp" alt="Site Map" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">Site Map (4)</span>
+                    </div>
+                </div>
+                <div onclick="openCategoryLightbox('architectural')" class="aspect-square bg-neutral-900 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left" data-aos-delay="200">
+                    <img src="sub/architectural1.webp" alt="Architectural" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">Architectural (4)</span>
+                    </div>
+                </div>
+                <div onclick="openCategoryLightbox('render')" class="aspect-square bg-neutral-800 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left" data-aos-delay="300">
+                    <img src="sub/3d_render1.webp" alt="3D Render" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">3D Render (4)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="lightbox" class="p-4">
+        <button onclick="closeLightbox()" class="absolute top-8 right-8 text-white z-[210]"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <button onclick="prevImg()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition z-[210]"><i data-lucide="chevron-left" class="w-12 h-12"></i></button>
+        <button onclick="nextImg()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition z-[210]"><i data-lucide="chevron-right" class="w-12 h-12"></i></button>
+        
+        <img id="lightbox-img" src="" alt="Full View" onclick="toggleZoom(event)">
+        <h4 id="lightbox-title" class="mt-8 text-xs font-black uppercase tracking-[0.5em] text-accent text-center px-4"></h4>
+    </div>
+
+    <a href="https://wa.me/6285117788355" class="floating-contact">
+        <i data-lucide="message-square"></i>
+    </a>
+
+    <footer class="py-12 text-center text-gray-600 text-[10px] tracking-widest uppercase relative z-10">
+        <p>© 2026 GENDO STUDIO. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        lucide.createIcons();
+        AOS.init({ once: false, mirror: true, duration: 800 });
+
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => { 
+                loader.style.opacity = '0'; 
+                setTimeout(() => loader.style.display = 'none', 800); 
+            }, 1000);
+        });
+
+        const galleryDatabase = {
+            drone: [
+                { src: 'sub/drone_view1.webp', title: 'Drone View - Slide 1' },
+                { src: 'sub/drone_view2.webp', title: 'Drone View - Slide 2' },
+                { src: 'sub/drone_view3.webp', title: 'Drone View - Slide 3' },
+                { src: 'sub/drone_view4.webp', title: 'Drone View - Slide 4' }
+            ],
+            sitemap: [
+                { src: 'sub/site_map1.webp', title: 'Site Map - Slide 1' },
+                { src: 'sub/site_map2.webp', title: 'Site Map - Slide 2' },
+                { src: 'sub/site_map3.webp', title: 'Site Map - Slide 3' },
+                { src: 'sub/site_map4.webp', title: 'Site Map - Slide 4' }
+            ],
+            architectural: [
+                { src: 'sub/architectural1.webp', title: 'Architectural - Slide 1' },
+                { src: 'sub/architectural2.webp', title: 'Architectural - Slide 2' },
+                { src: 'sub/architectural3.webp', title: 'Architectural - Slide 3' },
+                { src: 'sub/architectural4.webp', title: 'Architectural - Slide 4' }
+            ],
+            render: [
+                { src: 'sub/3d_render1.webp', title: '3D Render - Slide 1' },
+                { src: 'sub/3d_render2.webp', title: '3D Render - Slide 2' },
+                { src: 'sub/3d_render3.webp', title: '3D Render - Slide 3' },
+                { src: 'sub/3d_render4.webp', title: '3D Render - Slide 4' }
+            ]
+        };
+        
+        let currentActiveCategory = [];
+        let currentIdx = 0;
+
+        function openCategoryLightbox(categoryKey) {
+            currentActiveCategory = galleryDatabase[categoryKey];
+            currentIdx = 0;
+            const lightbox = document.getElementById('lightbox');
+            
+            updateLightboxContent();
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('lightbox-img').classList.remove('zoomed');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImg() {
+            currentIdx = (currentIdx + 1) % currentActiveCategory.length;
+            updateLightboxContent();
+        }
+
+        function prevImg() {
+            currentIdx = (currentIdx - 1 + currentActiveCategory.length) % currentActiveCategory.length;
+            updateLightboxContent();
+        }
+
+        function updateLightboxContent() {
+            const img = document.getElementById('lightbox-img');
+            const title = document.getElementById('lightbox-title');
+            img.src = currentActiveCategory[currentIdx].src;
+            title.innerText = currentActiveCategory[currentIdx].title;
+            img.classList.remove('zoomed');
+        }
+
+        function toggleZoom(e) {
+            e.stopPropagation();
+            document.getElementById('lightbox-img').classList.toggle('zoomed');
+        }
+
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if(e.target.id === 'lightbox') closeLightbox();
+        });
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            const isOpen = mobileMenu.classList.toggle('active');
+            menuIcon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+            lucide.createIcons();
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(mobileMenu.classList.contains('active')) toggleMenu();
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                // Diubah menggunakan kelas global liquid-texture
+                nav.classList.add('liquid-texture', 'py-4');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('liquid-texture', 'py-4');
+                nav.classList.add('py-6');
+            }
+        });
+
+        const btnUnit = document.getElementById('toggle-unit');
+        const btnPack = document.getElementById('toggle-pack');
+        const prices = document.querySelectorAll('.price-value');
+
+        // Logic toggle menggunakan liquid-texture untuk animasi aktif/prapilih
+        function setPricing(isPack) {
+            prices.forEach(p => p.classList.add('price-hidden'));
+            
+            setTimeout(() => {
+                if(isPack) {
+                    btnPack.classList.add('liquid-texture', 'text-white', 'scale-105'); 
+                    btnPack.classList.remove('text-gray-400');
+                    btnUnit.classList.remove('liquid-texture', 'text-white', 'scale-105'); 
+                    btnUnit.classList.add('text-gray-400');
+                    
+                    prices[0].innerHTML = "Hubungi Kami <span class='text-xs text-gray-500 font-normal'>/ Paket Pro</span>";
+                    prices[1].innerHTML = "Mulai 2jt <span class='text-xs text-gray-500 font-normal'>/ Hektar</span>";
+                    prices[2].innerHTML = "Borongan <span class='text-xs text-gray-500 font-normal'>/ Project</span>";
+                } else {
+                    btnUnit.classList.add('liquid-texture', 'text-white', 'scale-105'); 
+                    btnUnit.classList.remove('text-gray-400');
+                    btnPack.classList.remove('liquid-texture', 'text-white', 'scale-105'); 
+                    btnPack.classList.add('text-gray-400');
+
+                    prices[0].innerHTML = "Rp200.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
+                    prices[1].innerHTML = "Rp600.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
+                    prices[2].innerHTML = "Rp10.000 <span class='text-xs text-gray-500 font-normal'>/ m²</span>";
+                }
+                prices.forEach(p => p.classList.remove('price-hidden'));
+            }, 300);
+        }
+
+        btnPack.addEventListener('click', () => setPricing(true));
+        btnUnit.addEventListener('click', () => setPricing(false));
+    </script>
+</body>
+</html>
