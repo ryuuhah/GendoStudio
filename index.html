@@ -56,6 +56,14 @@
             animation: causticScale 8s infinite alternate ease-in-out, causticMove 15s infinite linear;
         }
 
+        /* OPTIMASI SELULER (Mematikan animasi latar belakang berat di HP) */
+        @media (max-width: 768px) {
+            .aurora-bg, .caustic-overlay, .diagonal-dots {
+                animation: none !important;
+                opacity: 0.4; /* Mengunci opacity agar tetap terlihat tanpa animasi berjalan */
+            }
+        }
+
         .nav-link {
             position: relative;
             padding-bottom: 4px;
@@ -80,19 +88,16 @@
             background-color: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(10px);
-            /* baseFrequency diubah ke 0.4 untuk memperbesar pori-pori/noise agar mirip kulit jeruk */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.25'/%3E%3C/svg%3E");
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.35s ease;
         }
 
-        /* ANIMASI TITIK DIAGONAL DIPERPADAT */
         .diagonal-dots {
             position: absolute;
             inset: 0;
             z-index: 0;
             background-image: radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px);
-            /* Jarak diperkecil ke 20px */
             background-size: 20px 20px;
             animation: moveDots 5s linear infinite;
         }
@@ -182,16 +187,18 @@
             background: var(--accent);
         }
 
+        /* EFEK PRAPILIH SERVICES - Diperkuat saat di hover */
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(229, 62, 62, 0.15);
-            transition: all 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px) scale(1.02); /* Sedikit membesar dan terangkat */
             border-color: var(--accent);
-            box-shadow: 0 10px 30px -10px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.05); /* Sedikit lebih terang */
+            box-shadow: 0 15px 35px -5px var(--accent-glow);
         }
 
         #loader {
@@ -214,7 +221,6 @@
             background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
         }
 
-        /* Lightbox & Zoom Styles */
         #lightbox {
             display: none;
             position: fixed;
@@ -251,7 +257,7 @@
     </div>
 
     <!-- Header / Navbar -->
-    <nav id="navbar" class="fixed w-full z-[70] py-6 px-6">
+    <nav id="navbar" class="fixed w-full z-[70] py-6 px-6 transition-all duration-300">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="logo.webp" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain">
@@ -283,17 +289,16 @@
             <h2 class="hero-gendo text-5xl md:text-[8rem] font-black leading-none uppercase">GENDO</h2>
             <h2 class="hero-studio text-5xl md:text-[8rem] font-black leading-none uppercase mb-6">STUDIO</h2>
             
-            <!-- Animasi AOS Gulir (muncul & keluar dinamis) -->
+            <!-- Animasi AOS Gulir (Keluar Masuk saat scroll dengan efek fade + zoom) -->
             <div class="h-6 md:h-8 mb-10 mt-4 px-4 flex justify-center overflow-hidden">
-                <span data-aos="fade-up" data-aos-duration="1000" class="inline-block text-accent tracking-[0.2em] md:tracking-[0.4em] uppercase text-[9px] md:text-xs font-bold">
+                <span data-aos="zoom-in-up" data-aos-duration="1200" data-aos-offset="30" class="inline-block text-accent tracking-[0.2em] md:tracking-[0.4em] uppercase text-[9px] md:text-xs font-bold">
                     Eksplorasi Presisi: Dari Visual Udara Hingga Arsitektur Nyata
                 </span>
             </div>
             
-            <!-- Tombol Berlatar Belakang Liquid Glass + Kulit Jeruk -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href="#services" class="liquid-texture rounded-full w-full sm:w-auto border border-white/10 px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">Explore <span class="text-accent group-hover:text-white">Services</span></a>
-                <a href="#portfolio" class="liquid-texture rounded-full w-full sm:w-auto border border-white/10 px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">View <span class="text-accent group-hover:text-white">Work</span></a>
+                <a href="#services" class="liquid-texture rounded-full w-full sm:w-auto px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">Explore <span class="text-accent group-hover:text-white">Services</span></a>
+                <a href="#portfolio" class="liquid-texture rounded-full w-full sm:w-auto px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">View <span class="text-accent group-hover:text-white">Work</span></a>
             </div>
         </div>
     </section>
@@ -310,10 +315,12 @@
                     <h3 class="text-3xl md:text-4xl font-black uppercase text-center md:text-left text-white">Our<br><span class="text-[#E53E3E]">Services</span></h3>
                 </div>
                 
-                <!-- Tombol Toggle (Satuan/Paket) dengan Efek Liquid Glass & Skala -->
-                <div class="flex items-center bg-white/5 p-1 rounded-full border border-white/10 relative overflow-hidden" data-aos="fade-left">
-                    <button id="toggle-unit" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 liquid-texture text-white scale-105">Satuan</button>
-                    <button id="toggle-pack" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 text-gray-400">Paket</button>
+                <!-- PERBAIKAN TOMBOL SATUAN & PAKET -->
+                <!-- Efek Liquid Glass kini di Kapsul Utama -->
+                <div class="flex items-center p-1 rounded-full relative overflow-hidden liquid-texture" data-aos="fade-left">
+                    <!-- Efek merah solid saja untuk pilihan aktif -->
+                    <button id="toggle-unit" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 bg-accent text-white scale-105">Satuan</button>
+                    <button id="toggle-pack" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 text-gray-400 hover:text-white">Paket</button>
                 </div>
             </div>
 
@@ -336,7 +343,8 @@
                     <i data-lucide="pencil-ruler" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
                     <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Gambar 2D+3D</h4>
                     <p class="text-gray-400 text-sm mb-8 leading-relaxed">Visualisasi desain arsitektur realistis melalui <span class="text-accent/80">pemodelan 3D</span> berakurasi tinggi.</p>
-                    <div class="price-container text-2xl font-black price-value mb-6">Rp20.000 <span class="text-xs text-gray-500 font-normal">/ m²</span></div>
+                    <!-- UPDATE HARGA 2D 3D -->
+                    <div class="price-container text-2xl font-black price-value mb-6">Rp25.000 <span class="text-xs text-gray-500 font-normal">/ m²</span></div>
                     <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
                 </div>
             </div>
@@ -399,6 +407,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         lucide.createIcons();
+        /* AOS dikonfigurasi dengan mirror: true agar teks keluar masuk halus saat discroll */
         AOS.init({ once: false, mirror: true, duration: 800 });
 
         window.addEventListener('load', () => {
@@ -503,7 +512,6 @@
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                // Diubah menggunakan kelas global liquid-texture
                 nav.classList.add('liquid-texture', 'py-4');
                 nav.classList.remove('py-6');
             } else {
@@ -516,29 +524,30 @@
         const btnPack = document.getElementById('toggle-pack');
         const prices = document.querySelectorAll('.price-value');
 
-        // Logic toggle menggunakan liquid-texture untuk animasi aktif/prapilih
+        // Logic toggle diubah sesuai warna merah solid
         function setPricing(isPack) {
             prices.forEach(p => p.classList.add('price-hidden'));
             
             setTimeout(() => {
                 if(isPack) {
-                    btnPack.classList.add('liquid-texture', 'text-white', 'scale-105'); 
+                    btnPack.classList.add('bg-accent', 'text-white', 'scale-105'); 
                     btnPack.classList.remove('text-gray-400');
-                    btnUnit.classList.remove('liquid-texture', 'text-white', 'scale-105'); 
+                    btnUnit.classList.remove('bg-accent', 'text-white', 'scale-105'); 
                     btnUnit.classList.add('text-gray-400');
                     
                     prices[0].innerHTML = "Hubungi Kami <span class='text-xs text-gray-500 font-normal'>/ Paket Pro</span>";
                     prices[1].innerHTML = "Mulai 2jt <span class='text-xs text-gray-500 font-normal'>/ Hektar</span>";
                     prices[2].innerHTML = "Borongan <span class='text-xs text-gray-500 font-normal'>/ Project</span>";
                 } else {
-                    btnUnit.classList.add('liquid-texture', 'text-white', 'scale-105'); 
+                    btnUnit.classList.add('bg-accent', 'text-white', 'scale-105'); 
                     btnUnit.classList.remove('text-gray-400');
-                    btnPack.classList.remove('liquid-texture', 'text-white', 'scale-105'); 
+                    btnPack.classList.remove('bg-accent', 'text-white', 'scale-105'); 
                     btnPack.classList.add('text-gray-400');
 
-                    prices[0].innerHTML = "Rp200.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
+                    prices[0].innerHTML = "Rp250.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
                     prices[1].innerHTML = "Rp600.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
-                    prices[2].innerHTML = "Rp10.000 <span class='text-xs text-gray-500 font-normal'>/ m²</span>";
+                    // UPDATE HARGA 2D 3D SATUAN
+                    prices[2].innerHTML = "Rp25.000 <span class='text-xs text-gray-500 font-normal'>/ m²</span>";
                 }
                 prices.forEach(p => p.classList.remove('price-hidden'));
             }, 300);
