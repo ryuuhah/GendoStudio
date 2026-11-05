@@ -207,17 +207,32 @@
             color: var(--accent);
         }
 
+        /* KARTU LIQUID GLASS DENGAN TEPI SANGAT MELENGKUNG DAN EFEK TERANGKAT SAAT PRAPILIH */
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 2px solid rgba(229, 62, 62, 0.15);
+            border-top: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 1.75rem; /* Tepi melengkung halus */
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.15), 0 8px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-12px) scale(1.05);
+            transform: translateY(-8px) scale(1.02); /* Efek sedikit terangkat & membesar halus */
             border-color: var(--accent);
             background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 15px 35px -5px var(--accent-glow);
+            box-shadow: 0 20px 40px -10px var(--accent-glow), inset 0 1px 4px rgba(255, 255, 255, 0.3);
+        }
+
+        /* LATAR BELAKANG KHUSUS GABUNGAN SERVICES - MENGAPA MEMILIH KAMI - ALUR KERJA */
+        .section-group-bg {
+            position: relative;
+            background: radial-gradient(circle at 50% 20%, rgba(229, 62, 62, 0.04) 0%, rgba(10, 10, 10, 0.85) 50%, rgba(5, 5, 5, 0.95) 100%),
+                        url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
+            border-top: 1px solid rgba(229, 62, 62, 0.15);
+            border-bottom: 1px solid rgba(229, 62, 62, 0.15);
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
         #loader {
@@ -230,10 +245,12 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateY(-110%);
             opacity: 0;
+            pointer-events: none;
         }
         #mobile-menu.active {
             transform: translateY(0);
             opacity: 1;
+            pointer-events: auto;
         }
 
         .gallery-texture {
@@ -291,17 +308,18 @@
                 <a href="#portfolio" class="nav-link hover:text-accent transition">Portfolio</a>
                 <a href="https://wa.me/6285117788355" class="contact-pulse-red px-5 py-2 inline-block text-white font-bold tracking-widest">Contact</a>
             </div>
-            <button id="menu-toggle" class="md:hidden outline-none relative z-[80]">
-                <i data-lucide="menu" id="menu-icon" class="text-white"></i>
+            <button id="menu-toggle" class="md:hidden outline-none relative z-[80] p-2">
+                <i data-lucide="menu" id="menu-icon" class="text-white w-6 h-6"></i>
             </button>
         </div>
     </nav>
 
+    <!-- Menu Seluler yang Diperbaiki agar tidak menyangkut -->
     <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-[60] flex flex-col items-center justify-center space-y-8 text-sm font-bold tracking-[0.4em] uppercase md:hidden">
-        <a href="#home" class="mobile-link">Home</a>
-        <a href="#about" class="mobile-link">About</a>
-        <a href="#services" class="mobile-link">Services</a>
-        <a href="#portfolio" class="mobile-link">Portfolio</a>
+        <a href="#home" class="mobile-link hover:text-accent transition">Home</a>
+        <a href="#about" class="mobile-link hover:text-accent transition">About</a>
+        <a href="#services" class="mobile-link hover:text-accent transition">Services</a>
+        <a href="#portfolio" class="mobile-link hover:text-accent transition">Portfolio</a>
         <a href="https://wa.me/6285117788355" class="text-accent mobile-link">Contact</a>
     </div>
 
@@ -327,7 +345,7 @@
     <!-- Transisi -->
     <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
 
-    <!-- 1. SECTION ABOUT US (TENTANG KAMI) -->
+    <!-- SECTION ABOUT US (TENTANG KAMI) -->
     <section id="about" class="py-24 px-6 relative z-10">
         <div class="diagonal-dots"></div>
         <div class="max-w-7xl mx-auto relative z-10">
@@ -343,10 +361,8 @@
                 </div>
                 <div data-aos="fade-left" class="relative mt-8 md:mt-0">
                     <div class="liquid-texture rounded-2xl p-2 md:p-3 transform md:rotate-2 hover:rotate-0 transition-transform duration-500">
-                        <!-- Gunakan foto drone/arsitektur terbaik Anda disini -->
                         <img src="sub/architectural1.webp" alt="Tentang Kami" class="w-full h-auto rounded-xl grayscale hover:grayscale-0 transition-all duration-500 opacity-80 object-cover aspect-video">
                     </div>
-                    <!-- Lencana Floating -->
                     <div class="absolute -bottom-6 -left-6 md:-left-10 liquid-texture rounded-xl p-4 md:p-6 transform -rotate-3 border-accent shadow-2xl">
                         <div class="text-accent font-black text-2xl md:text-3xl">100%</div>
                         <div class="text-[9px] md:text-[10px] text-white uppercase tracking-widest mt-1">Akurasi Struktural</div>
@@ -359,154 +375,149 @@
     <!-- Transisi -->
     <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
 
-    <!-- SECTION SERVICES -->
-    <section id="services" class="py-24 px-6 relative overflow-hidden z-10">
-        <div class="max-w-7xl mx-auto relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8">
-                <div data-aos="fade-right">
-                    <h3 class="text-3xl md:text-4xl font-black uppercase text-center md:text-left text-white tracking-widest">Our<br><span class="text-[#E53E3E]">Services</span></h3>
-                </div>
-                
-                <div class="flex items-center p-1.5 rounded-full relative overflow-hidden liquid-texture w-[260px]" data-aos="fade-left">
-                    <div id="slide-bg" class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-[#E53E3E] rounded-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_10px_rgba(229,62,62,0.4)]"></div>
+    <!-- KELOMPOK LATAR BELAKANG KHUSUS (SERVICES, MENGAPA MEMILIH KAMI, & ALUR KERJA) -->
+    <div class="section-group-bg py-16 relative overflow-hidden">
+        
+        <!-- SECTION SERVICES -->
+        <section id="services" class="py-12 px-6 relative z-10">
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8">
+                    <div data-aos="fade-right">
+                        <h3 class="text-3xl md:text-4xl font-black uppercase text-center md:text-left text-white tracking-widest">Our<br><span class="text-[#E53E3E]">Services</span></h3>
+                    </div>
                     
-                    <button id="toggle-unit" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-white">Satuan</button>
-                    <button id="toggle-pack" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-gray-400 hover:text-white">Paket</button>
+                    <div class="flex items-center p-1.5 rounded-full relative overflow-hidden liquid-texture w-[260px]" data-aos="fade-left">
+                        <div id="slide-bg" class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-[#E53E3E] rounded-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_10px_rgba(229,62,62,0.4)]"></div>
+                        
+                        <button id="toggle-unit" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-white">Satuan</button>
+                        <button id="toggle-pack" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-gray-400 hover:text-white">Paket</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-8 group" data-aos="fade-up">
+                        <i data-lucide="video" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
+                        <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Videografi Drone</h4>
+                        <p class="text-gray-400 text-sm mb-8 leading-relaxed">Dokumentasi udara sinematik <span class="text-accent/80">beresolusi tinggi</span> untuk kebutuhan profesional.</p>
+                        <div class="price-container text-2xl font-black price-value mb-6">Rp250.000 <span class="text-xs text-gray-500 font-normal">/ baterai</span></div>
+                        <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl">Pesan Sekarang</a>
+                    </div>
+                    <div class="glass-card p-8 group" data-aos="fade-up" data-aos-delay="100">
+                        <i data-lucide="map" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
+                        <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Foto Orthomosaic</h4>
+                        <p class="text-gray-400 text-sm mb-8 leading-relaxed">Pemetaan topografi <span class="text-accent/80">presisi tinggi</span> untuk survei lahan dan analisis spasial.</p>
+                        <div class="price-container text-2xl font-black price-value mb-6">Rp600.000 <span class="text-xs text-gray-500 font-normal">/ baterai</span></div>
+                        <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl">Pesan Sekarang</a>
+                    </div>
+                    <div class="glass-card p-8 group" data-aos="fade-up" data-aos-delay="200">
+                        <i data-lucide="pencil-ruler" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
+                        <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Gambar 2D+3D</h4>
+                        <p class="text-gray-400 text-sm mb-8 leading-relaxed">Visualisasi desain arsitektur realistis melalui <span class="text-accent/80">pemodelan 3D</span> berakurasi tinggi.</p>
+                        <div class="price-container text-2xl font-black price-value mb-6">Rp25.000 <span class="text-xs text-gray-500 font-normal">/ m²</span></div>
+                        <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl">Pesan Sekarang</a>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="glass-card p-8 group" data-aos="fade-up">
-                    <i data-lucide="video" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
-                    <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Videografi Drone</h4>
-                    <p class="text-gray-400 text-sm mb-8 leading-relaxed">Dokumentasi udara sinematik <span class="text-accent/80">beresolusi tinggi</span> untuk kebutuhan profesional.</p>
-                    <div class="price-container text-2xl font-black price-value mb-6">Rp250.000 <span class="text-xs text-gray-500 font-normal">/ baterai</span></div>
-                    <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
-                </div>
-                <div class="glass-card p-8 group" data-aos="fade-up" data-aos-delay="100">
-                    <i data-lucide="map" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
-                    <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Foto Orthomosaic</h4>
-                    <p class="text-gray-400 text-sm mb-8 leading-relaxed">Pemetaan topografi <span class="text-accent/80">presisi tinggi</span> untuk survei lahan dan analisis spasial.</p>
-                    <div class="price-container text-2xl font-black price-value mb-6">Rp600.000 <span class="text-xs text-gray-500 font-normal">/ baterai</span></div>
-                    <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
-                </div>
-                <div class="glass-card p-8 group" data-aos="fade-up" data-aos-delay="200">
-                    <i data-lucide="pencil-ruler" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
-                    <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Gambar 2D+3D</h4>
-                    <p class="text-gray-400 text-sm mb-8 leading-relaxed">Visualisasi desain arsitektur realistis melalui <span class="text-accent/80">pemodelan 3D</span> berakurasi tinggi.</p>
-                    <div class="price-container text-2xl font-black price-value mb-6">Rp25.000 <span class="text-xs text-gray-500 font-normal">/ m²</span></div>
-                    <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
+        <!-- SECTION WHY CHOOSE US (MENGAPA MEMILIH KAMI) -->
+        <section id="features" class="py-20 px-6 relative z-10">
+            <div class="max-w-7xl mx-auto">
+                <h3 class="text-center text-2xl md:text-3xl font-black uppercase tracking-widest mb-16" data-aos="zoom-in-up">Mengapa <span class="text-accent">Memilih Kami</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-8 group text-center" data-aos="fade-up">
+                        <div class="mx-auto w-16 h-16 liquid-texture rounded-full flex items-center justify-center mb-6 group-hover:border-accent transition-colors">
+                            <i data-lucide="crosshair" class="w-7 h-7 text-[#E53E3E] group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-3 text-white tracking-wider">Presisi Udara</h4>
+                        <p class="text-gray-400 text-xs leading-relaxed">Perekaman citra orthomosaic tingkat lanjut untuk ekstraksi koordinat dan topografi area secara akurat.</p>
+                    </div>
+                    <div class="glass-card p-8 group text-center" data-aos="fade-up" data-aos-delay="100">
+                        <div class="mx-auto w-16 h-16 liquid-texture rounded-full flex items-center justify-center mb-6 group-hover:border-accent transition-colors">
+                            <i data-lucide="layers" class="w-7 h-7 text-[#E53E3E] group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-3 text-white tracking-wider">Akurasi Struktural</h4>
+                        <p class="text-gray-400 text-xs leading-relaxed">Pengukuran presisi pada elemen arsitektur, perhitungan volume material, serta estimasi RAB yang teliti.</p>
+                    </div>
+                    <div class="glass-card p-8 group text-center" data-aos="fade-up" data-aos-delay="200">
+                        <div class="mx-auto w-16 h-16 liquid-texture rounded-full flex items-center justify-center mb-6 group-hover:border-accent transition-colors">
+                            <i data-lucide="cpu" class="w-7 h-7 text-[#E53E3E] group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-3 text-white tracking-wider">Armada Profesional</h4>
+                        <p class="text-gray-400 text-xs leading-relaxed">Didukung sepenuhnya oleh drone dan stasiun workstation berspesifikasi tinggi standar industri kreatif.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Transisi -->
-    <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
-
-    <!-- 2. SECTION WHY CHOOSE US (MENGAPA MEMILIH KAMI) -->
-    <section id="features" class="py-24 px-6 relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <h3 class="text-center text-2xl md:text-3xl font-black uppercase tracking-widest mb-16" data-aos="zoom-in-up">Mengapa <span class="text-accent">Memilih Kami</span></h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Fitur 1 -->
-                <div class="glass-card p-8 group text-center" data-aos="fade-up">
-                    <div class="mx-auto w-16 h-16 liquid-texture rounded-full flex items-center justify-center mb-6 group-hover:border-accent transition-colors">
-                        <i data-lucide="crosshair" class="w-7 h-7 text-[#E53E3E] group-hover:scale-110 transition-transform"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-3 text-white tracking-wider">Presisi Udara</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">Perekaman citra orthomosaic tingkat lanjut untuk ekstraksi koordinat dan topografi area secara akurat.</p>
-                </div>
-                <!-- Fitur 2 -->
-                <div class="glass-card p-8 group text-center" data-aos="fade-up" data-aos-delay="100">
-                    <div class="mx-auto w-16 h-16 liquid-texture rounded-full flex items-center justify-center mb-6 group-hover:border-accent transition-colors">
-                        <i data-lucide="layers" class="w-7 h-7 text-[#E53E3E] group-hover:scale-110 transition-transform"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-3 text-white tracking-wider">Akurasi Struktural</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">Pengukuran presisi pada elemen arsitektur, perhitungan volume material, serta estimasi RAB yang teliti.</p>
-                </div>
-                <!-- Fitur 3 -->
-                <div class="glass-card p-8 group text-center" data-aos="fade-up" data-aos-delay="200">
-                    <div class="mx-auto w-16 h-16 liquid-texture rounded-full flex items-center justify-center mb-6 group-hover:border-accent transition-colors">
-                        <i data-lucide="cpu" class="w-7 h-7 text-[#E53E3E] group-hover:scale-110 transition-transform"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-3 text-white tracking-wider">Armada Profesional</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">Didukung sepenuhnya oleh drone dan stasiun workstation berspesifikasi tinggi standar industri kreatif.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Transisi -->
-    <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
-
-    <!-- 3. SECTION WORKFLOW (ALUR KERJA) -->
-    <section id="workflow" class="py-24 px-6 relative z-10 overflow-hidden">
-        <div class="max-w-4xl mx-auto">
-            <h3 class="text-center text-2xl md:text-3xl font-black uppercase tracking-widest mb-20" data-aos="zoom-in-up">Alur <span class="text-accent">Kerja</span></h3>
-            
-            <div class="relative border-l-2 border-[#E53E3E]/30 ml-4 md:ml-0 md:border-l-0">
-                <!-- Garis Tengah Pembatas (Khusus Desktop) -->
-                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-[#E53E3E]/30 -translate-x-1/2"></div>
+        <!-- SECTION WORKFLOW (ALUR KERJA) -->
+        <section id="workflow" class="py-20 px-6 relative z-10 overflow-hidden">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-center text-2xl md:text-3xl font-black uppercase tracking-widest mb-20" data-aos="zoom-in-up">Alur <span class="text-accent">Kerja</span></h3>
                 
-                <!-- Langkah 1 -->
-                <div class="relative flex flex-col md:flex-row items-center mb-12 group" data-aos="fade-up">
-                    <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
-                        <span class="text-white font-black text-sm">1</span>
+                <div class="relative border-l-2 border-[#E53E3E]/30 ml-4 md:ml-0 md:border-l-0">
+                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-[#E53E3E]/30 -translate-x-1/2"></div>
+                    
+                    <!-- Langkah 1 -->
+                    <div class="relative flex flex-col md:flex-row items-center mb-12 group" data-aos="fade-up">
+                        <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
+                            <span class="text-white font-black text-sm">1</span>
+                        </div>
+                        <div class="md:w-1/2 pl-12 md:pl-0 md:pr-16 md:text-right w-full">
+                            <div class="glass-card p-6 inline-block w-full text-left md:text-right group-hover:border-accent transition-colors">
+                                <h4 class="text-sm font-bold text-accent mb-2 uppercase tracking-widest">Konsultasi</h4>
+                                <p class="text-gray-400 text-xs leading-relaxed">Diskusi kebutuhan spesifik proyek, penetapan ruang lingkup, dan estimasi biaya secara transparan.</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block md:w-1/2"></div>
                     </div>
-                    <div class="md:w-1/2 pl-12 md:pl-0 md:pr-16 md:text-right w-full">
-                        <div class="glass-card p-6 inline-block w-full text-left md:text-right group-hover:border-accent transition-colors">
-                            <h4 class="text-sm font-bold text-accent mb-2 uppercase tracking-widest">Konsultasi</h4>
-                            <p class="text-gray-400 text-xs leading-relaxed">Diskusi kebutuhan spesifik proyek, penetapan ruang lingkup, dan estimasi biaya secara transparan.</p>
+
+                    <!-- Langkah 2 -->
+                    <div class="relative flex flex-col md:flex-row items-center mb-12 group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
+                            <span class="text-white font-black text-sm">2</span>
+                        </div>
+                        <div class="hidden md:block md:w-1/2"></div>
+                        <div class="md:w-1/2 pl-12 md:pl-16 w-full">
+                            <div class="glass-card p-6 inline-block w-full text-left group-hover:border-accent transition-colors">
+                                <h4 class="text-sm font-bold text-accent mb-2 uppercase tracking-widest">Eksekusi Lapangan</h4>
+                                <p class="text-gray-400 text-xs leading-relaxed">Pengumpulan data lapangan, penerbangan drone, dan observasi struktural dengan akurasi terkalibrasi.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="hidden md:block md:w-1/2"></div>
-                </div>
 
-                <!-- Langkah 2 -->
-                <div class="relative flex flex-col md:flex-row items-center mb-12 group" data-aos="fade-up" data-aos-delay="100">
-                    <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
-                        <span class="text-white font-black text-sm">2</span>
-                    </div>
-                    <div class="hidden md:block md:w-1/2"></div>
-                    <div class="md:w-1/2 pl-12 md:pl-16 w-full">
-                        <div class="glass-card p-6 inline-block w-full text-left group-hover:border-accent transition-colors">
-                            <h4 class="text-sm font-bold text-accent mb-2 uppercase tracking-widest">Eksekusi Lapangan</h4>
-                            <p class="text-gray-400 text-xs leading-relaxed">Pengumpulan data lapangan, penerbangan drone, dan observasi struktural dengan akurasi terkalibrasi.</p>
+                    <!-- Langkah 3 -->
+                    <div class="relative flex flex-col md:flex-row items-center mb-12 group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
+                            <span class="text-white font-black text-sm">3</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Langkah 3 -->
-                <div class="relative flex flex-col md:flex-row items-center mb-12 group" data-aos="fade-up" data-aos-delay="200">
-                    <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
-                        <span class="text-white font-black text-sm">3</span>
-                    </div>
-                    <div class="md:w-1/2 pl-12 md:pl-0 md:pr-16 md:text-right w-full">
-                        <div class="glass-card p-6 inline-block w-full text-left md:text-right group-hover:border-accent transition-colors">
-                            <h4 class="text-sm font-bold text-accent mb-2 uppercase tracking-widest">Pemrosesan Data</h4>
-                            <p class="text-gray-400 text-xs leading-relaxed">Pengolahan mentah menjadi gambar 3D konstruktif, pemodelan struktur, serta penyesuaian detail RAB.</p>
+                        <div class="md:w-1/2 pl-12 md:pl-0 md:pr-16 md:text-right w-full">
+                            <div class="glass-card p-6 inline-block w-full text-left md:text-right group-hover:border-accent transition-colors">
+                                <h4 class="text-sm font-bold text-accent mb-2 uppercase tracking-widest">Pemrosesan Data</h4>
+                                <p class="text-gray-400 text-xs leading-relaxed">Pengolahan mentah menjadi gambar 3D konstruktif, pemodelan struktur, serta penyesuaian detail RAB.</p>
+                            </div>
                         </div>
+                        <div class="hidden md:block md:w-1/2"></div>
                     </div>
-                    <div class="hidden md:block md:w-1/2"></div>
-                </div>
 
-                <!-- Langkah 4 -->
-                <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="300">
-                    <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
-                        <span class="text-white font-black text-sm">4</span>
-                    </div>
-                    <div class="hidden md:block md:w-1/2"></div>
-                    <div class="md:w-1/2 pl-12 md:pl-16 w-full">
-                        <div class="glass-card p-6 inline-block w-full text-left group-hover:border-accent transition-colors border-accent/50">
-                            <h4 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Penyerahan Hasil</h4>
-                            <p class="text-gray-400 text-xs leading-relaxed">Finalisasi serah terima render, denah, peta area, serta dokumen teknis yang komprehensif kepada Anda.</p>
+                    <!-- Langkah 4 -->
+                    <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="300">
+                        <div class="absolute left-[-21px] md:left-1/2 md:-translate-x-1/2 w-10 h-10 liquid-texture rounded-full border border-accent/50 flex items-center justify-center group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(229,62,62,0.6)] transition-all z-10 bg-black">
+                            <span class="text-white font-black text-sm">4</span>
+                        </div>
+                        <div class="hidden md:block md:w-1/2"></div>
+                        <div class="md:w-1/2 pl-12 md:pl-16 w-full">
+                            <div class="glass-card p-6 inline-block w-full text-left group-hover:border-accent transition-colors border-accent/50">
+                                <h4 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Penyerahan Hasil</h4>
+                                <p class="text-gray-400 text-xs leading-relaxed">Finalisasi serah terima render, denah, peta area, serta dokumen teknis yang komprehensif kepada Anda.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+    </div>
 
     <!-- Transisi -->
     <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
@@ -516,25 +527,25 @@
         <div class="max-w-7xl mx-auto">
             <h3 class="text-center text-2xl md:text-3xl font-black uppercase tracking-widest mb-16" data-aos="zoom-in-up"><span class="text-accent">Project</span> Gallery</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div onclick="openCategoryLightbox('drone')" class="aspect-square bg-neutral-900 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left">
+                <div onclick="openCategoryLightbox('drone')" class="aspect-square bg-neutral-900 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer rounded-2xl" data-aos="flip-left">
                     <img src="sub/drone_view1.webp" alt="Drone View" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">Drone View (4)</span>
                     </div>
                 </div>
-                <div onclick="openCategoryLightbox('sitemap')" class="aspect-square bg-neutral-800 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left" data-aos-delay="100">
+                <div onclick="openCategoryLightbox('sitemap')" class="aspect-square bg-neutral-800 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer rounded-2xl" data-aos="flip-left" data-aos-delay="100">
                     <img src="sub/site_map1.webp" alt="Site Map" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">Site Map (4)</span>
                     </div>
                 </div>
-                <div onclick="openCategoryLightbox('architectural')" class="aspect-square bg-neutral-900 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left" data-aos-delay="200">
+                <div onclick="openCategoryLightbox('architectural')" class="aspect-square bg-neutral-900 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer rounded-2xl" data-aos="flip-left" data-aos-delay="200">
                     <img src="sub/architectural1.webp" alt="Architectural" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">Architectural (4)</span>
                     </div>
                 </div>
-                <div onclick="openCategoryLightbox('render')" class="aspect-square bg-neutral-800 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer" data-aos="flip-left" data-aos-delay="300">
+                <div onclick="openCategoryLightbox('render')" class="aspect-square bg-neutral-800 group relative overflow-hidden border border-white/5 grayscale hover:grayscale-0 hover:scale-105 transition-all duration-500 cursor-pointer rounded-2xl" data-aos="flip-left" data-aos-delay="300">
                     <img src="sub/3d_render1.webp" alt="3D Render" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-[8px] md:text-[10px] uppercase tracking-widest text-white font-bold">3D Render (4)</span>
@@ -655,14 +666,24 @@
 
         function toggleMenu() {
             const isOpen = mobileMenu.classList.toggle('active');
+            
+            // Perbaikan sinkronisasi ikon menu seluler (Garis 3 / Silang)
             menuIcon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
             lucide.createIcons();
+            
+            if (isOpen) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
         }
 
         menuToggle.addEventListener('click', toggleMenu);
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if(mobileMenu.classList.contains('active')) toggleMenu();
+                if(mobileMenu.classList.contains('active')) {
+                    toggleMenu();
+                }
             });
         });
 
