@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gendo Studio</title>
     
+    <!-- MENAMBAHKAN IKON KECIL PADA TAB JENDELA (Favicon) -->
+    <link rel="icon" type="image/webp" href="logo.webp">
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -56,11 +59,10 @@
             animation: causticScale 8s infinite alternate ease-in-out, causticMove 15s infinite linear;
         }
 
-        /* OPTIMASI SELULER (Mematikan animasi latar belakang berat di HP) */
         @media (max-width: 768px) {
             .aurora-bg, .caustic-overlay, .diagonal-dots {
                 animation: none !important;
-                opacity: 0.4; /* Mengunci opacity agar tetap terlihat tanpa animasi berjalan */
+                opacity: 0.4;
             }
         }
 
@@ -83,14 +85,38 @@
             width: 100%;
         }
 
-        /* LIQUID GLASS & KULIT JERUK DIPERBAIKI (Berlaku Global) */
+        /* ----------------------------------------------------
+           LIQUID GLASS & KULIT JERUK (DITINGKATKAN)
+           ---------------------------------------------------- */
         .liquid-texture {
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.25'/%3E%3C/svg%3E");
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.8s ease;
+            /* 1. Tambahan Gradient Halus & Tidak Mendominasi (Hitam/Putih Transparan) */
+            background-image: 
+                /* 2. Tambahan Efek Bump/Normal ke Noise agar Kulit Jeruk terasa menonjol */
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='1.5'%3E%3CfeDistantLight azimuth='45' elevation='45'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E"), 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.6) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            
+            /* 3. Highlight dan Bingkai yang Mempertegas bentuk Kapsul */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3); /* Bingkai Highlight Atas */
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), /* Highlight Inner */
+                        inset 0 -1px 2px rgba(0, 0, 0, 0.5), /* Bayangan Inner Bawah */
+                        0 4px 15px rgba(0, 0, 0, 0.25); /* Bayangan Jatuh */
+            
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* GLOW PADA KAPSUL SAAT PRAPILIH (HOVER) */
+        .btn-glow-hover:hover {
+            box-shadow: 0 0 25px var(--accent-glow), 
+                        inset 0 1px 2px rgba(255, 255, 255, 0.4), 
+                        inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent);
+            transform: scale(1.05);
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='1.5'%3E%3CfeDistantLight azimuth='45' elevation='45'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E"), 
+                linear-gradient(135deg, rgba(229, 62, 62, 0.1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.7) 100%);
         }
 
         .diagonal-dots {
@@ -165,29 +191,33 @@
             transform: translateY(5px);
         }
 
+        /* EFEK LIQUID GLASS PADA FLOATING CONTACT */
         .floating-contact {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: #050505;
-            border: 1px solid var(--accent);
+            width: 56px; 
+            height: 56px;
             color: white;
-            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
-            box-shadow: 0 0 20px var(--accent-glow);
             z-index: 999;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             animation: bouncePulse 3s infinite;
         }
         @keyframes bouncePulse {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.1); box-shadow: 0 0 30px var(--accent-glow); }
+            50% { transform: translateY(-10px) scale(1.05); box-shadow: 0 0 25px var(--accent-glow); }
         }
         .floating-contact:hover {
-            background: var(--accent);
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 10px 25px var(--accent-glow), inset 0 0 15px rgba(229,62,62,0.4);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
-        /* EFEK PRAPILIH SERVICES - Diperkuat saat di hover */
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
@@ -195,9 +225,9 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-12px) scale(1.05); /* Sedikit membesar dan terangkat */
+            transform: translateY(-12px) scale(1.05);
             border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.05); /* Sedikit lebih terang */
+            background: rgba(255, 255, 255, 0.05);
             box-shadow: 0 15px 35px -5px var(--accent-glow);
         }
 
@@ -289,7 +319,6 @@
             <h2 class="hero-gendo text-5xl md:text-[8rem] font-black leading-none uppercase">GENDO</h2>
             <h2 class="hero-studio text-5xl md:text-[8rem] font-black leading-none uppercase mb-6">STUDIO</h2>
             
-            <!-- Animasi AOS Gulir (Keluar Masuk saat scroll dengan efek fade + zoom) -->
             <div class="h-6 md:h-8 mb-10 mt-4 px-4 flex justify-center overflow-hidden">
                 <span data-aos="zoom-in-up" data-aos-duration="1200" data-aos-offset="30" class="inline-block text-accent tracking-[0.2em] md:tracking-[0.4em] uppercase text-[9px] md:text-xs font-bold">
                     Eksplorasi Presisi: Dari Visual Udara Hingga Arsitektur Nyata
@@ -297,13 +326,13 @@
             </div>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href="#services" class="liquid-texture rounded-full w-full sm:w-auto px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">Explore <span class="text-accent group-hover:text-white">Services</span></a>
-                <a href="#portfolio" class="liquid-texture rounded-full w-full sm:w-auto px-10 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:scale-105 transition-all duration-300">View <span class="text-accent group-hover:text-white">Work</span></a>
+                <!-- DITERAPKAN: Kelas btn-glow-hover dan liquid-texture -->
+                <a href="#services" class="liquid-texture btn-glow-hover rounded-full w-full sm:w-auto px-10 py-4 font-bold uppercase text-xs tracking-widest group">Explore <span class="text-accent group-hover:text-white transition-colors">Services</span></a>
+                <a href="#portfolio" class="liquid-texture btn-glow-hover rounded-full w-full sm:w-auto px-10 py-4 font-bold uppercase text-xs tracking-widest group">View <span class="text-accent group-hover:text-white transition-colors">Work</span></a>
             </div>
         </div>
     </section>
 
-    <!-- Transisi Gradien dengan Animasi AOS (Home -> Services) -->
     <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
 
     <!-- Services -->
@@ -315,12 +344,13 @@
                     <h3 class="text-3xl md:text-4xl font-black uppercase text-center md:text-left text-white">Our<br><span class="text-[#E53E3E]">Services</span></h3>
                 </div>
                 
-                <!-- PERBAIKAN TOMBOL SATUAN & PAKET -->
-                <!-- Efek Liquid Glass kini di Kapsul Utama -->
-                <div class="flex items-center p-1 rounded-full relative overflow-hidden liquid-texture" data-aos="fade-left">
-                    <!-- Efek merah solid saja untuk pilihan aktif -->
-                    <button id="toggle-unit" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 bg-accent text-white scale-105">Satuan</button>
-                    <button id="toggle-pack" class="relative z-10 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 text-gray-400 hover:text-white">Paket</button>
+                <!-- DITERAPKAN: Animasi Slide Kapsul Merah dgn Jarak padding yang serasi (p-1.5) -->
+                <div class="flex items-center p-1.5 rounded-full relative overflow-hidden liquid-texture w-[260px]" data-aos="fade-left">
+                    <!-- Kapsul Merah Slide Background -->
+                    <div id="slide-bg" class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-[#E53E3E] rounded-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_10px_rgba(229,62,62,0.4)]"></div>
+                    
+                    <button id="toggle-unit" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-white">Satuan</button>
+                    <button id="toggle-pack" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-gray-400 hover:text-white">Paket</button>
                 </div>
             </div>
 
@@ -343,7 +373,6 @@
                     <i data-lucide="pencil-ruler" class="w-10 h-10 text-[#E53E3E] mb-6 transition-transform group-hover:scale-110"></i>
                     <h4 class="text-xl font-bold mb-4 text-[#E53E3E]">Gambar 2D+3D</h4>
                     <p class="text-gray-400 text-sm mb-8 leading-relaxed">Visualisasi desain arsitektur realistis melalui <span class="text-accent/80">pemodelan 3D</span> berakurasi tinggi.</p>
-                    <!-- UPDATE HARGA 2D 3D -->
                     <div class="price-container text-2xl font-black price-value mb-6">Rp25.000 <span class="text-xs text-gray-500 font-normal">/ m²</span></div>
                     <a href="https://wa.me/6285117788355" class="btn-order block text-center bg-white/10 border border-white/10 py-3 text-[10px] font-black uppercase tracking-widest">Pesan Sekarang</a>
                 </div>
@@ -351,7 +380,6 @@
         </div>
     </section>
 
-    <!-- Transisi Gradien dengan Animasi AOS (Services -> Portfolio) -->
     <div class="w-full h-32 bg-gradient-to-b from-transparent via-[#050505] to-transparent relative z-20 -my-16" data-aos="zoom-in" data-aos-duration="1000"></div>
 
     <!-- Portfolio Gallery -->
@@ -396,7 +424,8 @@
         <h4 id="lightbox-title" class="mt-8 text-xs font-black uppercase tracking-[0.5em] text-accent text-center px-4"></h4>
     </div>
 
-    <a href="https://wa.me/6285117788355" class="floating-contact">
+    <!-- DITERAPKAN: Efek Liquid Glass pada Floating Contact -->
+    <a href="https://wa.me/6285117788355" class="floating-contact liquid-texture">
         <i data-lucide="message-square"></i>
     </a>
 
@@ -407,7 +436,6 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         lucide.createIcons();
-        /* AOS dikonfigurasi dengan mirror: true agar teks keluar masuk halus saat discroll */
         AOS.init({ once: false, mirror: true, duration: 800 });
 
         window.addEventListener('load', () => {
@@ -522,33 +550,41 @@
 
         const btnUnit = document.getElementById('toggle-unit');
         const btnPack = document.getElementById('toggle-pack');
+        const slideBg = document.getElementById('slide-bg');
         const prices = document.querySelectorAll('.price-value');
 
-        // Logic toggle diubah sesuai warna merah solid
+        // Logic toggle diubah sesuai warna merah solid dengan animasi slide
         function setPricing(isPack) {
+            // Sembunyikan harga terlebih dahulu
             prices.forEach(p => p.classList.add('price-hidden'));
             
+            // Animasi kapsul langsung bergeser
+            if(isPack) {
+                slideBg.style.transform = 'translateX(100%)';
+                btnPack.classList.add('text-white');
+                btnPack.classList.remove('text-gray-400');
+                btnUnit.classList.remove('text-white');
+                btnUnit.classList.add('text-gray-400');
+            } else {
+                slideBg.style.transform = 'translateX(0)';
+                btnUnit.classList.add('text-white');
+                btnUnit.classList.remove('text-gray-400');
+                btnPack.classList.remove('text-white');
+                btnPack.classList.add('text-gray-400');
+            }
+
+            // Ganti teks harga setelah animasi fade out selesai
             setTimeout(() => {
                 if(isPack) {
-                    btnPack.classList.add('bg-accent', 'text-white', 'scale-105'); 
-                    btnPack.classList.remove('text-gray-400');
-                    btnUnit.classList.remove('bg-accent', 'text-white', 'scale-105'); 
-                    btnUnit.classList.add('text-gray-400');
-                    
                     prices[0].innerHTML = "Hubungi Kami <span class='text-xs text-gray-500 font-normal'>/ Paket Pro</span>";
                     prices[1].innerHTML = "Mulai 2jt <span class='text-xs text-gray-500 font-normal'>/ Hektar</span>";
                     prices[2].innerHTML = "Borongan <span class='text-xs text-gray-500 font-normal'>/ Project</span>";
                 } else {
-                    btnUnit.classList.add('bg-accent', 'text-white', 'scale-105'); 
-                    btnUnit.classList.remove('text-gray-400');
-                    btnPack.classList.remove('bg-accent', 'text-white', 'scale-105'); 
-                    btnPack.classList.add('text-gray-400');
-
                     prices[0].innerHTML = "Rp250.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
                     prices[1].innerHTML = "Rp600.000 <span class='text-xs text-gray-500 font-normal'>/ baterai</span>";
-                    // UPDATE HARGA 2D 3D SATUAN
                     prices[2].innerHTML = "Rp25.000 <span class='text-xs text-gray-500 font-normal'>/ m²</span>";
                 }
+                // Tampilkan kembali harga
                 prices.forEach(p => p.classList.remove('price-hidden'));
             }, 300);
         }
