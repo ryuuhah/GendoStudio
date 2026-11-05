@@ -2,7 +2,7 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gendo Studio</title>
     
     <link rel="icon" type="image/webp" href="logo.webp">
@@ -17,12 +17,23 @@
             --accent: #E53E3E; 
             --accent-glow: rgba(229, 62, 62, 0.4);
         }
+        * {
+            box-sizing: border-box;
+        }
         body { 
             font-family: 'Montserrat', sans-serif; 
             background-color: #050505;
             overflow-x: hidden;
+            width: 100%;
             margin: 0;
             color: white;
+        }
+
+        /* MEMPERBAIKI BUG HALAMAN TERPOTONG / SEBELAH KANAN HITAM DI MOBILE */
+        section {
+            width: 100%;
+            max-width: 100vw;
+            scroll-margin-top: 90px; /* AGAR TIDAK TERLALU KE ATAS DAN PAS DI TENGAH */
         }
 
         /* Background Layers */
@@ -207,25 +218,23 @@
             color: var(--accent);
         }
 
-        /* KARTU LIQUID GLASS DENGAN TEPI SANGAT MELENGKUNG DAN EFEK TERANGKAT SAAT PRAPILIH */
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 2px solid rgba(229, 62, 62, 0.15);
             border-top: 2px solid rgba(255, 255, 255, 0.25);
-            border-radius: 1.75rem; /* Tepi melengkung halus */
+            border-radius: 1.75rem;
             box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.15), 0 8px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-8px) scale(1.02); /* Efek sedikit terangkat & membesar halus */
+            transform: translateY(-8px) scale(1.02);
             border-color: var(--accent);
             background: rgba(255, 255, 255, 0.05);
             box-shadow: 0 20px 40px -10px var(--accent-glow), inset 0 1px 4px rgba(255, 255, 255, 0.3);
         }
 
-        /* LATAR BELAKANG KHUSUS GABUNGAN SERVICES - MENGAPA MEMILIH KAMI - ALUR KERJA */
         .section-group-bg {
             position: relative;
             background: radial-gradient(circle at 50% 20%, rgba(229, 62, 62, 0.04) 0%, rgba(10, 10, 10, 0.85) 50%, rgba(5, 5, 5, 0.95) 100%),
@@ -233,6 +242,7 @@
             border-top: 1px solid rgba(229, 62, 62, 0.15);
             border-bottom: 1px solid rgba(229, 62, 62, 0.15);
             box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
+            width: 100%;
         }
 
         #loader {
@@ -246,6 +256,8 @@
             transform: translateY(-110%);
             opacity: 0;
             pointer-events: none;
+            width: 100vw;
+            height: 100vh;
         }
         #mobile-menu.active {
             transform: translateY(0);
@@ -308,13 +320,13 @@
                 <a href="#portfolio" class="nav-link hover:text-accent transition">Portfolio</a>
                 <a href="https://wa.me/6285117788355" class="contact-pulse-red px-5 py-2 inline-block text-white font-bold tracking-widest">Contact</a>
             </div>
-            <button id="menu-toggle" class="md:hidden outline-none relative z-[80] p-2">
+            <button id="menu-toggle" class="md:hidden outline-none relative z-[80] p-2 cursor-pointer">
                 <i data-lucide="menu" id="menu-icon" class="text-white w-6 h-6"></i>
             </button>
         </div>
     </nav>
 
-    <!-- Menu Seluler yang Diperbaiki agar tidak menyangkut -->
+    <!-- Menu Seluler yang Diperbaiki (Tombol Garis 3 & Silang Sinkron) -->
     <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-[60] flex flex-col items-center justify-center space-y-8 text-sm font-bold tracking-[0.4em] uppercase md:hidden">
         <a href="#home" class="mobile-link hover:text-accent transition">Home</a>
         <a href="#about" class="mobile-link hover:text-accent transition">About</a>
@@ -389,8 +401,8 @@
                     <div class="flex items-center p-1.5 rounded-full relative overflow-hidden liquid-texture w-[260px]" data-aos="fade-left">
                         <div id="slide-bg" class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-[#E53E3E] rounded-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_10px_rgba(229,62,62,0.4)]"></div>
                         
-                        <button id="toggle-unit" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-white">Satuan</button>
-                        <button id="toggle-pack" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-gray-400 hover:text-white">Paket</button>
+                        <button id="toggle-unit" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-white cursor-pointer">Satuan</button>
+                        <button id="toggle-pack" class="relative z-10 w-1/2 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-500 text-gray-400 hover:text-white cursor-pointer">Paket</button>
                     </div>
                 </div>
 
@@ -557,9 +569,9 @@
 
     <!-- LIGHTBOX -->
     <div id="lightbox" class="p-4">
-        <button onclick="closeLightbox()" class="absolute top-8 right-8 text-white z-[210]"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <button onclick="prevImg()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition z-[210]"><i data-lucide="chevron-left" class="w-12 h-12"></i></button>
-        <button onclick="nextImg()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition z-[210]"><i data-lucide="chevron-right" class="w-12 h-12"></i></button>
+        <button onclick="closeLightbox()" class="absolute top-8 right-8 text-white z-[210] cursor-pointer"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <button onclick="prevImg()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition z-[210] cursor-pointer"><i data-lucide="chevron-left" class="w-12 h-12"></i></button>
+        <button onclick="nextImg()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition z-[210] cursor-pointer"><i data-lucide="chevron-right" class="w-12 h-12"></i></button>
         
         <img id="lightbox-img" src="" alt="Full View" onclick="toggleZoom(event)">
         <h4 id="lightbox-title" class="mt-8 text-xs font-black uppercase tracking-[0.5em] text-accent text-center px-4"></h4>
@@ -667,7 +679,7 @@
         function toggleMenu() {
             const isOpen = mobileMenu.classList.toggle('active');
             
-            // Perbaikan sinkronisasi ikon menu seluler (Garis 3 / Silang)
+            // Perbaikan sinkronisasi ikon menu seluler agar berganti bolak-balik (Garis 3 <-> Silang)
             menuIcon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
             lucide.createIcons();
             
